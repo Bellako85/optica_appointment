@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="appointment_form" name="Agendar cita óptica">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure optica-appointment-page">
+                <section class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm border-0 optica-appointment-card">
+                                <div class="card-body p-4 p-md-5">
+                                    <h1 class="mb-2">Agenda tu cita</h1>
+                                    <p class="text-muted mb-4">Completa tus datos y nuestro equipo confirmará tu atención en la óptica.</p>
+                                    <form action="/agendar-cita" method="post" class="row g-3">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="patient_name">Nombre</label>
+                                            <input id="patient_name" name="patient_name" type="text" class="form-control" t-att-value="form_values.get('patient_name', '')" required="required"/>
+                                            <div t-if="errors.get('patient_name')" class="text-danger small mt-1" t-esc="errors.get('patient_name')"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="phone">Teléfono</label>
+                                            <input id="phone" name="phone" type="tel" class="form-control" t-att-value="form_values.get('phone', '')" required="required"/>
+                                            <div t-if="errors.get('phone')" class="text-danger small mt-1" t-esc="errors.get('phone')"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="whatsapp">WhatsApp</label>
+                                            <input id="whatsapp" name="whatsapp" type="tel" class="form-control" t-att-value="form_values.get('whatsapp', '')"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="email">Email</label>
+                                            <input id="email" name="email" type="email" class="form-control" t-att-value="form_values.get('email', '')" required="required"/>
+                                            <div t-if="errors.get('email')" class="text-danger small mt-1" t-esc="errors.get('email')"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="appointment_date">Fecha deseada</label>
+                                            <input id="appointment_date" name="appointment_date" type="date" class="form-control" t-att-value="form_values.get('appointment_date', '')" required="required"/>
+                                            <div t-if="errors.get('appointment_date')" class="text-danger small mt-1" t-esc="errors.get('appointment_date')"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="appointment_time">Hora deseada</label>
+                                            <input id="appointment_time" name="appointment_time" type="time" class="form-control" t-att-value="form_values.get('appointment_time', '')" required="required"/>
+                                            <div t-if="errors.get('appointment_time')" class="text-danger small mt-1" t-esc="errors.get('appointment_time')"/>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label" for="reason">Motivo de la cita</label>
+                                            <textarea id="reason" name="reason" rows="4" class="form-control" required="required"><t t-esc="form_values.get('reason', '')"/></textarea>
+                                            <div t-if="errors.get('reason')" class="text-danger small mt-1" t-esc="errors.get('reason')"/>
+                                        </div>
+                                        <div class="col-12 d-grid d-md-flex justify-content-md-end mt-4">
+                                            <button type="submit" class="btn btn-primary btn-lg">Agendar cita</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="appointment_success" name="Cita agendada">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure optica-appointment-page">
+                <section class="container py-5 text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-sm border-0 optica-appointment-card">
+                                <div class="card-body p-5">
+                                    <h1 class="mb-3">¡Gracias!</h1>
+                                    <p class="lead text-muted mb-4">Tu cita fue registrada correctamente. Te contactaremos para cualquier detalle adicional.</p>
+                                    <a href="/" class="btn btn-primary">Volver al inicio</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>
