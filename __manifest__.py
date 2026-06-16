@@ -8,7 +8,7 @@ Permite crear citas desde el backend y desde una página pública del website.
     """,
     "version": "17.0.1.0.0",
     "category": "Services/Appointment",
-    "author": "Optica",
+    "author": "Bellako85",
     "license": "LGPL-3",
     "depends": ["base", "mail", "website"],
     "data": [
