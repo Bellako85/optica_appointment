@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_optica_appointment_tree" model="ir.ui.view">
+        <field name="name">optica.appointment.tree</field>
+        <field name="model">optica.appointment</field>
+        <field name="arch" type="xml">
+            <tree string="Citas Óptica" decoration-success="state == 'confirmed'" decoration-muted="state == 'cancelled'" decoration-info="state == 'done'">
+                <field name="appointment_datetime"/>
+                <field name="patient_name"/>
+                <field name="phone"/>
+                <field name="whatsapp"/>
+                <field name="email"/>
+                <field name="reason"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_optica_appointment_form" model="ir.ui.view">
+        <field name="name">optica.appointment.form</field>
+        <field name="model">optica.appointment</field>
+        <field name="arch" type="xml">
+            <form string="Cita Óptica">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirmar" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Marcar realizada" class="btn-primary" invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_cancel" type="object" string="Cancelar" invisible="state == 'cancelled'"/>
+                    <button name="action_reset_to_draft" type="object" string="Volver a borrador" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="patient_name" placeholder="Nombre del paciente"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Datos del paciente">
+                            <field name="phone"/>
+                            <field name="whatsapp"/>
+                            <field name="email"/>
+                        </group>
+                        <group string="Agenda">
+                            <field name="appointment_date"/>
+                            <field name="appointment_time" widget="float_time"/>
+                            <field name="appointment_datetime" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason" placeholder="Motivo de la cita"/>
+                        <field name="internal_notes" placeholder="Notas internas para el equipo"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_optica_appointment_calendar" model="ir.ui.view">
+        <field name="name">optica.appointment.calendar</field>
+        <field name="model">optica.appointment</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendario de Citas" date_start="appointment_datetime" color="state" event_open_popup="true">
+                <field name="patient_name"/>
+                <field name="phone"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_optica_appointment_search" model="ir.ui.view">
+        <field name="name">optica.appointment.search</field>
+        <field name="model">optica.appointment</field>
+        <field name="arch" type="xml">
+            <search string="Buscar citas">
+                <field name="patient_name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <filter string="Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirmadas" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Canceladas" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <filter string="Realizadas" name="done" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter string="Hoy" name="today" domain="[('appointment_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Próximas" name="upcoming" domain="[('appointment_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Fecha" name="group_date" context="{'group_by': 'appointment_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_optica_appointment" model="ir.actions.act_window">
+        <field name="name">Citas</field>
+        <field name="res_model">optica.appointment</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_optica_appointment_search"/>
+        <field name="context">{'search_default_upcoming': 1}</field>
+    </record>
+
+    <menuitem id="menu_optica_appointment_root" name="Citas Óptica" sequence="10"/>
+    <menuitem id="menu_optica_appointment" name="Citas" parent="menu_optica_appointment_root" action="action_optica_appointment" sequence="10"/>
+</odoo>
