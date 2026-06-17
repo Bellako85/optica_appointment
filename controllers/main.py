@@ -24,7 +24,7 @@ class OpticaAppointmentController(http.Controller):
             "appointment_date": post.get("appointment_date"),
             "appointment_time": self._parse_float_time(post.get("appointment_time")),
             "reason": post.get("reason", "").strip(),
-            "state": "confirmed",
+            "state": "draft",
         }
 
     def _validate_appointment_form(self, post):
