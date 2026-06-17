@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from datetime import timedelta
+from datetime import datetime, time, timedelta
+
+import pytz
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
@@ -124,28 +126,36 @@ class OpticaAppointment(models.Model):
         copy=False,
     )
 
-    @api.depends("appointment_date", "appointment_time")
-    def _compute_appointment_datetime(self):
-        """Build a datetime useful for calendar/list ordering from date and decimal hour."""
-        for appointment in self:
-            if not appointment.appointment_date:
-                appointment.appointment_datetime = False
-                continue
+  @api.depends("appointment_date", "appointment_time")
+def _compute_appointment_datetime(self):
+    """Build appointment datetime using the user's local timezone and store it in UTC."""
+    for appointment in self:
+        if not appointment.appointment_date:
+            appointment.appointment_datetime = False
+            continue
 
-            hour_float = appointment.appointment_time or 0.0
-            hours = int(hour_float)
-            minutes = int(round((hour_float - hours) * 60))
+        hour_float = appointment.appointment_time or 0.0
+        hours = int(hour_float)
+        minutes = int(round((hour_float - hours) * 60))
 
-            if minutes >= 60:
-                hours += 1
-                minutes -= 60
+        if minutes >= 60:
+            hours += 1
+            minutes -= 60
 
-            hours = min(max(hours, 0), 23)
-            minutes = min(max(minutes, 0), 59)
+        hours = min(max(hours, 0), 23)
+        minutes = min(max(minutes, 0), 59)
 
-            appointment.appointment_datetime = fields.Datetime.to_datetime(
-                appointment.appointment_date
-            ).replace(hour=hours, minute=minutes, second=0)
+        local_date = fields.Date.to_date(appointment.appointment_date)
+        local_datetime = datetime.combine(local_date, time(hour=hours, minute=minutes))
+
+        user_tz_name = self.env.user.tz or "UTC"
+        user_tz = pytz.timezone(user_tz_name)
+
+        localized_datetime = user_tz.localize(local_datetime)
+        utc_datetime = localized_datetime.astimezone(pytz.UTC).replace(tzinfo=None)
+
+        appointment.appointment_datetime = utc_datetime
+        
 
     @api.depends("appointment_datetime", "duration")
     def _compute_appointment_end_datetime(self):
