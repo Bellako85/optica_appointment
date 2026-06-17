@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
+
 {
     "name": "Citas Óptica",
     "summary": "Agenda de citas para pacientes de una óptica desde backend y website.",
     "description": """
 Sistema simple para gestionar citas de pacientes de una óptica.
 Permite crear citas desde el backend y desde una página pública del website.
-    """,
-    "version": "17.0.1.0.0",
+""",
+    "version": "17.0.1.1.0",
     "category": "Services/Appointment",
     "author": "Bellako85",
     "license": "LGPL-3",
-    "depends": ["base", "mail", "website"],
+    "depends": [
+        "base",
+        "mail",
+        "website",
+        "calendar",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "views/optica_appointment_views.xml",
