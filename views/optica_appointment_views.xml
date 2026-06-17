@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
     <record id="view_optica_appointment_tree" model="ir.ui.view">
         <field name="name">optica.appointment.tree</field>
         <field name="model">optica.appointment</field>
         <field name="arch" type="xml">
-            <tree string="Citas Óptica" decoration-success="state == 'confirmed'" decoration-muted="state == 'cancelled'" decoration-info="state == 'done'">
+            <tree string="Citas">
                 <field name="appointment_datetime"/>
+                <field name="appointment_end_datetime"/>
                 <field name="patient_name"/>
+                <field name="partner_id"/>
                 <field name="phone"/>
-                <field name="whatsapp"/>
-                <field name="email"/>
-                <field name="reason"/>
-                <field name="state" widget="badge"/>
+                <field name="appointment_type"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -22,35 +23,73 @@
         <field name="arch" type="xml">
             <form string="Cita Óptica">
                 <header>
-                    <button name="action_confirm" type="object" string="Confirmar" class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_done" type="object" string="Marcar realizada" class="btn-primary" invisible="state not in ('draft', 'confirmed')"/>
-                    <button name="action_cancel" type="object" string="Cancelar" invisible="state == 'cancelled'"/>
-                    <button name="action_reset_to_draft" type="object" string="Volver a borrador" invisible="state == 'draft'"/>
+                    <button
+                        name="action_confirm"
+                        type="object"
+                        string="Confirmar"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_done"
+                        type="object"
+                        string="Marcar como realizada"
+                        class="btn-success"
+                        invisible="state != 'confirmed'"
+                    />
+                    <button
+                        name="action_cancel"
+                        type="object"
+                        string="Cancelar"
+                        class="btn-secondary"
+                        invisible="state in ['cancelled', 'done']"
+                    />
+                    <button
+                        name="action_reset_to_draft"
+                        type="object"
+                        string="Regresar a pendiente"
+                        invisible="state == 'draft'"
+                    />
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
                 </header>
+
                 <sheet>
                     <div class="oe_title">
                         <h1>
                             <field name="patient_name" placeholder="Nombre del paciente"/>
                         </h1>
                     </div>
+
                     <group>
-                        <group string="Datos del paciente">
+                        <group string="Paciente">
+                            <field name="partner_id"/>
                             <field name="phone"/>
                             <field name="whatsapp"/>
                             <field name="email"/>
                         </group>
-                        <group string="Agenda">
+
+                        <group string="Cita">
+                            <field name="appointment_type"/>
                             <field name="appointment_date"/>
                             <field name="appointment_time" widget="float_time"/>
+                            <field name="duration" widget="float_time"/>
                             <field name="appointment_datetime" readonly="1"/>
+                            <field name="appointment_end_datetime" readonly="1"/>
+                            <field name="calendar_event_id" readonly="1"/>
                         </group>
                     </group>
-                    <group>
-                        <field name="reason" placeholder="Motivo de la cita"/>
-                        <field name="internal_notes" placeholder="Notas internas para el equipo"/>
-                    </group>
+
+                    <notebook>
+                        <page string="Motivo">
+                            <field name="reason"/>
+                        </page>
+
+                        <page string="Notas internas">
+                            <field name="internal_notes"/>
+                        </page>
+                    </notebook>
                 </sheet>
+
                 <chatter/>
             </form>
         </field>
@@ -60,8 +99,15 @@
         <field name="name">optica.appointment.calendar</field>
         <field name="model">optica.appointment</field>
         <field name="arch" type="xml">
-            <calendar string="Calendario de Citas" date_start="appointment_datetime" color="state" event_open_popup="true">
+            <calendar
+                string="Citas"
+                date_start="appointment_datetime"
+                date_stop="appointment_end_datetime"
+                color="state"
+                mode="week"
+            >
                 <field name="patient_name"/>
+                <field name="appointment_type"/>
                 <field name="phone"/>
                 <field name="state"/>
             </calendar>
@@ -74,18 +120,58 @@
         <field name="arch" type="xml">
             <search string="Buscar citas">
                 <field name="patient_name"/>
+                <field name="partner_id"/>
                 <field name="phone"/>
                 <field name="email"/>
-                <filter string="Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Confirmadas" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
-                <filter string="Canceladas" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
-                <filter string="Realizadas" name="done" domain="[('state', '=', 'done')]"/>
-                <separator/>
-                <filter string="Hoy" name="today" domain="[('appointment_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
-                <filter string="Próximas" name="upcoming" domain="[('appointment_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <field name="appointment_type"/>
+                <field name="state"/>
+
+                <filter
+                    name="upcoming"
+                    string="Próximas"
+                    domain="[('appointment_datetime', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"
+                />
+
+                <filter
+                    name="draft"
+                    string="Pendientes"
+                    domain="[('state', '=', 'draft')]"
+                />
+
+                <filter
+                    name="confirmed"
+                    string="Confirmadas"
+                    domain="[('state', '=', 'confirmed')]"
+                />
+
+                <filter
+                    name="done"
+                    string="Realizadas"
+                    domain="[('state', '=', 'done')]"
+                />
+
+                <filter
+                    name="cancelled"
+                    string="Canceladas"
+                    domain="[('state', '=', 'cancelled')]"
+                />
+
                 <group expand="0" string="Agrupar por">
-                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
-                    <filter string="Fecha" name="group_date" context="{'group_by': 'appointment_date'}"/>
+                    <filter
+                        name="group_by_state"
+                        string="Estado"
+                        context="{'group_by': 'state'}"
+                    />
+                    <filter
+                        name="group_by_type"
+                        string="Tipo de cita"
+                        context="{'group_by': 'appointment_type'}"
+                    />
+                    <filter
+                        name="group_by_date"
+                        string="Fecha"
+                        context="{'group_by': 'appointment_date'}"
+                    />
                 </group>
             </search>
         </field>
@@ -95,10 +181,21 @@
         <field name="name">Citas</field>
         <field name="res_model">optica.appointment</field>
         <field name="view_mode">tree,form,calendar</field>
-        <field name="search_view_id" ref="view_optica_appointment_search"/>
         <field name="context">{'search_default_upcoming': 1}</field>
     </record>
 
-    <menuitem id="menu_optica_appointment_root" name="Citas Óptica" sequence="10"/>
-    <menuitem id="menu_optica_appointment" name="Citas" parent="menu_optica_appointment_root" action="action_optica_appointment" sequence="10"/>
+    <menuitem
+        id="menu_optica_appointment_root"
+        name="Citas Óptica"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_optica_appointment"
+        name="Citas"
+        parent="menu_optica_appointment_root"
+        action="action_optica_appointment"
+        sequence="10"
+    />
+
 </odoo>
