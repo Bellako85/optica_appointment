@@ -1,58 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="appointment_form" name="Agendar cita óptica">
+
+    <template id="appointment_form" name="Agenda tu cita">
         <t t-call="website.layout">
-            <div id="wrap" class="oe_structure optica-appointment-page">
+            <div id="wrap" class="oe_structure">
                 <section class="container py-5">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
-                            <div class="card shadow-sm border-0 optica-appointment-card">
-                                <div class="card-body p-4 p-md-5">
-                                    <h1 class="mb-2">Agenda tu cita</h1>
-                                    <p class="text-muted mb-4">Completa tus datos y nuestro equipo confirmará tu atención en la óptica.</p>
-                                    <form action="/agendar-cita" method="post" class="row g-3">
-                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <h1 class="mb-3">Agenda tu cita</h1>
+                            <p class="lead mb-4">
+                                Completa tus datos y nuestro equipo confirmará tu atención en la óptica.
+                            </p>
 
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="patient_name">Nombre</label>
-                                            <input id="patient_name" name="patient_name" type="text" class="form-control" t-att-value="form_values.get('patient_name', '')" required="required"/>
-                                            <div t-if="errors.get('patient_name')" class="text-danger small mt-1" t-esc="errors.get('patient_name')"/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="phone">Teléfono</label>
-                                            <input id="phone" name="phone" type="tel" class="form-control" t-att-value="form_values.get('phone', '')" required="required"/>
-                                            <div t-if="errors.get('phone')" class="text-danger small mt-1" t-esc="errors.get('phone')"/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="whatsapp">WhatsApp</label>
-                                            <input id="whatsapp" name="whatsapp" type="tel" class="form-control" t-att-value="form_values.get('whatsapp', '')"/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="email">Email</label>
-                                            <input id="email" name="email" type="email" class="form-control" t-att-value="form_values.get('email', '')" required="required"/>
-                                            <div t-if="errors.get('email')" class="text-danger small mt-1" t-esc="errors.get('email')"/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="appointment_date">Fecha deseada</label>
-                                            <input id="appointment_date" name="appointment_date" type="date" class="form-control" t-att-value="form_values.get('appointment_date', '')" required="required"/>
-                                            <div t-if="errors.get('appointment_date')" class="text-danger small mt-1" t-esc="errors.get('appointment_date')"/>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="appointment_time">Hora deseada</label>
-                                            <input id="appointment_time" name="appointment_time" type="time" class="form-control" t-att-value="form_values.get('appointment_time', '')" required="required"/>
-                                            <div t-if="errors.get('appointment_time')" class="text-danger small mt-1" t-esc="errors.get('appointment_time')"/>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label" for="reason">Motivo de la cita</label>
-                                            <textarea id="reason" name="reason" rows="4" class="form-control" required="required"><t t-esc="form_values.get('reason', '')"/></textarea>
-                                            <div t-if="errors.get('reason')" class="text-danger small mt-1" t-esc="errors.get('reason')"/>
-                                        </div>
-                                        <div class="col-12 d-grid d-md-flex justify-content-md-end mt-4">
-                                            <button type="submit" class="btn btn-primary btn-lg">Agendar cita</button>
-                                        </div>
-                                    </form>
+                            <t t-if="errors.get('general')">
+                                <div class="alert alert-danger" role="alert">
+                                    <t t-esc="errors.get('general')"/>
                                 </div>
-                            </div>
+                            </t>
+
+                            <form action="/agendar-cita" method="post" class="o_website_form">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                <div class="mb-3">
+                                    <label for="patient_name" class="form-label">Nombre</label>
+                                    <input
+                                        type="text"
+                                        name="patient_name"
+                                        id="patient_name"
+                                        class="form-control"
+                                        required="required"
+                                        t-att-value="form_values.get('patient_name', '')"
+                                    />
+                                    <t t-if="errors.get('patient_name')">
+                                        <small class="text-danger">
+                                            <t t-esc="errors.get('patient_name')"/>
+                                        </small>
+                                    </t>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        id="phone"
+                                        class="form-control"
+                                        required="required"
+                                        t-att-value="form_values.get('phone', '')"
+                                    />
+                                    <t t-if="errors.get('phone')">
+                                        <small class="text-danger">
+                                            <t t-esc="errors.get('phone')"/>
+                                        </small>
+                                    </t>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="whatsapp" class="form-label">WhatsApp</label>
+                                    <input
+                                        type="tel"
+                                        name="whatsapp"
+                                        id="whatsapp"
+                                        class="form-control"
+                                        t-att-value="form_values.get('whatsapp', '')"
+                                    />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        id="email"
+                                        class="form-control"
+                                        required="required"
+                                        t-att-value="form_values.get('email', '')"
+                                    />
+                                    <t t-if="errors.get('email')">
+                                        <small class="text-danger">
+                                            <t t-esc="errors.get('email')"/>
+                                        </small>
+                                    </t>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="appointment_type" class="form-label">Tipo de cita</label>
+                                    <select
+                                        name="appointment_type"
+                                        id="appointment_type"
+                                        class="form-control"
+                                        required="required"
+                                    >
+                                        <option value="exam" t-att-selected="'selected' if form_values.get('appointment_type', 'exam') == 'exam' else None">
+                                            Examen visual
+                                        </option>
+                                        <option value="delivery" t-att-selected="'selected' if form_values.get('appointment_type') == 'delivery' else None">
+                                            Entrega de lentes
+                                        </option>
+                                        <option value="adjustment" t-att-selected="'selected' if form_values.get('appointment_type') == 'adjustment' else None">
+                                            Ajuste de armazón
+                                        </option>
+                                        <option value="warranty" t-att-selected="'selected' if form_values.get('appointment_type') == 'warranty' else None">
+                                            Garantía
+                                        </option>
+                                        <option value="progressive_adaptation" t-att-selected="'selected' if form_values.get('appointment_type') == 'progressive_adaptation' else None">
+                                            Adaptación de progresivos
+                                        </option>
+                                        <option value="other" t-att-selected="'selected' if form_values.get('appointment_type') == 'other' else None">
+                                            Otro
+                                        </option>
+                                    </select>
+                                    <t t-if="errors.get('appointment_type')">
+                                        <small class="text-danger">
+                                            <t t-esc="errors.get('appointment_type')"/>
+                                        </small>
+                                    </t>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="appointment_date" class="form-label">Fecha deseada</label>
+                                        <input
+                                            type="date"
+                                            name="appointment_date"
+                                            id="appointment_date"
+                                            class="form-control"
+                                            required="required"
+                                            t-att-value="form_values.get('appointment_date', '')"
+                                        />
+                                        <t t-if="errors.get('appointment_date')">
+                                            <small class="text-danger">
+                                                <t t-esc="errors.get('appointment_date')"/>
+                                            </small>
+                                        </t>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="appointment_time" class="form-label">Hora deseada</label>
+                                        <input
+                                            type="time"
+                                            name="appointment_time"
+                                            id="appointment_time"
+                                            class="form-control"
+                                            required="required"
+                                            t-att-value="form_values.get('appointment_time', '')"
+                                        />
+                                        <t t-if="errors.get('appointment_time')">
+                                            <small class="text-danger">
+                                                <t t-esc="errors.get('appointment_time')"/>
+                                            </small>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="reason" class="form-label">Motivo de la cita</label>
+                                    <textarea
+                                        name="reason"
+                                        id="reason"
+                                        class="form-control"
+                                        rows="4"
+                                        required="required"
+                                    ><t t-esc="form_values.get('reason', '')"/></textarea>
+                                    <t t-if="errors.get('reason')">
+                                        <small class="text-danger">
+                                            <t t-esc="errors.get('reason')"/>
+                                        </small>
+                                    </t>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    Agendar cita
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </section>
@@ -60,23 +180,20 @@
         </t>
     </template>
 
-    <template id="appointment_success" name="Cita agendada">
+    <template id="appointment_success" name="Cita registrada">
         <t t-call="website.layout">
-            <div id="wrap" class="oe_structure optica-appointment-page">
+            <div id="wrap" class="oe_structure">
                 <section class="container py-5 text-center">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-7">
-                            <div class="card shadow-sm border-0 optica-appointment-card">
-                                <div class="card-body p-5">
-                                    <h1 class="mb-3">¡Gracias!</h1>
-                                    <p class="lead text-muted mb-4">Tu cita fue registrada correctamente. Te contactaremos para cualquier detalle adicional.</p>
-                                    <a href="/" class="btn btn-primary">Volver al inicio</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h1 class="mb-3">¡Gracias!</h1>
+                    <p class="lead">
+                        Tu cita fue registrada correctamente. Te contactaremos para confirmar cualquier detalle adicional.
+                    </p>
+                    <a href="/" class="btn btn-primary mt-3">
+                        Volver al inicio
+                    </a>
                 </section>
             </div>
         </t>
     </template>
+
 </odoo>
