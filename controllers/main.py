@@ -65,6 +65,28 @@ class OpticaAppointmentController(http.Controller):
 
         return errors
 
+    def _is_slot_available(self, post):
+        appointment_date = post.get("appointment_date")
+        appointment_time = self._parse_float_time(post.get("appointment_time"))
+        duration = 0.5
+
+        new_start = appointment_time
+        new_end = appointment_time + duration
+
+        appointments = request.env["optica.appointment"].sudo().search([
+            ("appointment_date", "=", appointment_date),
+            ("state", "in", ["draft", "confirmed"]),
+        ])
+
+        for appointment in appointments:
+            existing_start = appointment.appointment_time
+            existing_end = appointment.appointment_time + (appointment.duration or 0.5)
+
+            if existing_start < new_end and existing_end > new_start:
+                return False
+
+        return True
+
     @http.route(
         "/agendar-cita",
         type="http",
@@ -85,13 +107,19 @@ class OpticaAppointmentController(http.Controller):
                 values["errors"] = errors
                 return request.render("optica_appointment.appointment_form", values)
 
+            if not self._is_slot_available(post):
+                values["errors"] = {
+                    "general": "Ese horario ya fue solicitado. Por favor elige otra hora disponible."
+                }
+                return request.render("optica_appointment.appointment_form", values)
+
             try:
                 request.env["optica.appointment"].sudo().create(
                     self._prepare_appointment_values(post)
                 )
-            except ValidationError as error:
+            except ValidationError:
                 values["errors"] = {
-                    "general": error.args[0] if error.args else "No se pudo registrar la cita."
+                    "general": "Ese horario ya fue solicitado. Por favor elige otra hora disponible."
                 }
                 return request.render("optica_appointment.appointment_form", values)
 
