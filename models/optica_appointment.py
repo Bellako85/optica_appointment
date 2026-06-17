@@ -54,7 +54,7 @@ class OpticaAppointment(models.Model):
     )
     state = fields.Selection(
         selection=[
-            ("draft", "Borrador"),
+            ("draft", "Pendiente"),
             ("confirmed", "Confirmada"),
             ("cancelled", "Cancelada"),
             ("done", "Realizada"),
