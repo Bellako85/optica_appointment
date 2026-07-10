@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime, time, timedelta
-
 import pytz
-
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-
 
 class OpticaAppointment(models.Model):
     """Appointment agenda for optical-store patients."""
@@ -16,34 +13,11 @@ class OpticaAppointment(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "appointment_datetime desc, id desc"
 
-    patient_name = fields.Char(
-        string="Nombre del paciente",
-        required=True,
-        tracking=True,
-    )
-
-    partner_id = fields.Many2one(
-        "res.partner",
-        string="Paciente",
-        tracking=True,
-    )
-
-    phone = fields.Char(
-        string="Teléfono",
-        required=True,
-        tracking=True,
-    )
-
-    whatsapp = fields.Char(
-        string="WhatsApp",
-        tracking=True,
-    )
-
-    email = fields.Char(
-        string="Email",
-        required=True,
-        tracking=True,
-    )
+    patient_name = fields.Char(string="Nombre del paciente", required=True, tracking=True)
+    partner_id = fields.Many2one("res.partner", string="Paciente", tracking=True)
+    phone = fields.Char(string="Teléfono", required=True, tracking=True)
+    whatsapp = fields.Char(string="WhatsApp", tracking=True)
+    email = fields.Char(string="Email", required=True, tracking=True)
 
     appointment_type = fields.Selection(
         selection=[
@@ -60,47 +34,19 @@ class OpticaAppointment(models.Model):
         tracking=True,
     )
 
-    appointment_date = fields.Date(
-        string="Fecha de cita",
-        required=True,
-        tracking=True,
-    )
-
+    appointment_date = fields.Date(string="Fecha de cita", required=True, tracking=True)
     appointment_time = fields.Float(
         string="Hora de cita",
         required=True,
         tracking=True,
         help="Hora en formato 24 horas. Ejemplo: 14.50 equivale a 14:30.",
     )
-
-    duration = fields.Float(
-        string="Duración",
-        default=0.5,
-        required=True,
-        tracking=True,
-        help="Duración en horas. 0.5 equivale a 30 minutos.",
-    )
-
-    appointment_datetime = fields.Datetime(
-        string="Inicio de cita",
-        compute="_compute_appointment_datetime",
-        store=True,
-        index=True,
-    )
-
-    appointment_end_datetime = fields.Datetime(
-        string="Fin de cita",
-        compute="_compute_appointment_end_datetime",
-        store=True,
-        index=True,
-    )
-
-    reason = fields.Text(
-        string="Motivo de la cita",
-        required=True,
-        tracking=True,
-    )
-
+    duration = fields.Float(string="Duración", default=0.5, required=True, tracking=True)
+    
+    appointment_datetime = fields.Datetime(string="Inicio de cita", compute="_compute_appointment_datetime", store=True, index=True)
+    appointment_end_datetime = fields.Datetime(string="Fin de cita", compute="_compute_appointment_end_datetime", store=True, index=True)
+    
+    reason = fields.Text(string="Motivo de la cita", required=True, tracking=True)
     state = fields.Selection(
         selection=[
             ("draft", "Pendiente"),
@@ -115,20 +61,12 @@ class OpticaAppointment(models.Model):
         index=True,
     )
 
-    internal_notes = fields.Text(
-        string="Notas internas",
-    )
-
-    calendar_event_id = fields.Many2one(
-        "calendar.event",
-        string="Evento de calendario",
-        readonly=True,
-        copy=False,
-    )
+    internal_notes = fields.Text(string="Notas internas")
+    calendar_event_id = fields.Many2one("calendar.event", string="Evento de calendario", readonly=True, copy=False)
+    crm_lead_id = fields.Many2one("crm.lead", string="Oportunidad CRM", readonly=True, copy=False)
 
     @api.depends("appointment_date", "appointment_time")
     def _compute_appointment_datetime(self):
-        """Build appointment datetime using the user's local timezone and store it in UTC."""
         for appointment in self:
             if not appointment.appointment_date:
                 appointment.appointment_datetime = False
@@ -146,10 +84,7 @@ class OpticaAppointment(models.Model):
             minutes = min(max(minutes, 0), 59)
 
             local_date = fields.Date.to_date(appointment.appointment_date)
-            local_datetime = datetime.combine(
-                local_date,
-                time(hour=hours, minute=minutes),
-            )
+            local_datetime = datetime.combine(local_date, time(hour=hours, minute=minutes))
 
             user_tz_name = self.env.user.tz or "UTC"
             user_tz = pytz.timezone(user_tz_name)
@@ -164,8 +99,7 @@ class OpticaAppointment(models.Model):
         for appointment in self:
             if appointment.appointment_datetime:
                 appointment.appointment_end_datetime = (
-                    appointment.appointment_datetime
-                    + timedelta(hours=appointment.duration or 0.5)
+                    appointment.appointment_datetime + timedelta(hours=appointment.duration or 0.5)
                 )
             else:
                 appointment.appointment_end_datetime = False
@@ -187,9 +121,7 @@ class OpticaAppointment(models.Model):
             ])
 
             if overlapping:
-                raise ValidationError(
-                    "Ya existe una cita registrada en ese horario. Elige otra hora."
-                )
+                raise ValidationError("Ya existe una cita registrada en ese horario. Elige otra hora.")
 
     @api.constrains("duration")
     def _check_duration(self):
@@ -199,20 +131,13 @@ class OpticaAppointment(models.Model):
 
     def _get_or_create_partner(self):
         self.ensure_one()
-
         partner = False
 
         if self.email:
-            partner = self.env["res.partner"].search([
-                ("email", "=", self.email),
-            ], limit=1)
+            partner = self.env["res.partner"].search([("email", "=", self.email)], limit=1)
 
         if not partner and self.phone:
-            partner = self.env["res.partner"].search([
-                "|",
-                ("phone", "=", self.phone),
-                ("mobile", "=", self.phone),
-            ], limit=1)
+            partner = self.env["res.partner"].search(["|", ("phone", "=", self.phone), ("mobile", "=", self.phone)], limit=1)
 
         if not partner:
             partner = self.env["res.partner"].create({
@@ -222,21 +147,17 @@ class OpticaAppointment(models.Model):
                 "email": self.email,
                 "customer_rank": 1,
             })
-
         return partner
 
     def _create_calendar_event(self):
         self.ensure_one()
-
         if self.calendar_event_id:
             return self.calendar_event_id
 
         if not self.appointment_datetime or not self.appointment_end_datetime:
             return False
 
-        partner_ids = []
-        if self.partner_id:
-            partner_ids = [self.partner_id.id]
+        partner_ids = [self.partner_id.id] if self.partner_id else []
 
         event = self.env["calendar.event"].create({
             "name": "Cita óptica - %s" % self.patient_name,
@@ -246,8 +167,47 @@ class OpticaAppointment(models.Model):
             "description": self.reason or "",
         })
 
-        self.calendar_event_id = event.id
+        self.write({"calendar_event_id": event.id})
         return event
+
+    def _create_crm_opportunity(self):
+        self.ensure_one()
+        if self.crm_lead_id:
+            return self.crm_lead_id
+
+        stage = self.env["crm.stage"].search([("name", "=", "Lead calificado")], limit=1)
+
+        # Formatear la hora de formato float a algo estético (ej. 14.5 -> 14:30)
+        hours = int(self.appointment_time)
+        minutes = int(round((self.appointment_time - hours) * 60))
+        time_str = f"{hours:02d}:{minutes:02d}"
+
+        lead = self.env["crm.lead"].sudo().create({
+            "name": "Cita óptica - %s" % self.patient_name,
+            "type": "opportunity",
+            "partner_id": self.partner_id.id if self.partner_id else False,
+            "partner_name": self.patient_name,
+            "contact_name": self.patient_name,
+            "phone": self.phone,
+            "mobile": self.whatsapp or self.phone,
+            "email_from": self.email,
+            "stage_id": stage.id if stage else False,
+            "expected_revenue": 600.0, # Vinculamos el valor de tu campaña 2x$600 de una vez
+            "description": """
+Tipo de cita: %s
+Fecha: %s a las %s hrs.
+Motivo: %s
+            """ % (
+                dict(self._fields["appointment_type"].selection).get(self.appointment_type),
+                self.appointment_date,
+                time_str,
+                self.reason or "",
+            ),
+        })
+
+        # FIJADO: Indentación correcta dentro del método
+        self.write({"crm_lead_id": lead.id})
+        return lead
 
     def action_confirm(self):
         for appointment in self:
@@ -255,6 +215,7 @@ class OpticaAppointment(models.Model):
                 appointment.partner_id = appointment._get_or_create_partner().id
 
             appointment._create_calendar_event()
+            appointment._create_crm_opportunity()
 
         self.write({"state": "confirmed"})
 
