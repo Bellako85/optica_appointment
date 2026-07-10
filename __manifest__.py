@@ -16,6 +16,7 @@ Permite crear citas desde el backend y desde una página pública del website.
         "mail",
         "website",
         "calendar",
+        "crm",
     ],
     "data": [
         "security/ir.model.access.csv",
