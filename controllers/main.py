@@ -106,7 +106,7 @@ class OpticaAppointmentController(http.Controller):
             if existing_start < new_end and existing_end > new_start:
                 return False
 
-            return True
+        return True
 
     @http.route(
         "/agendar-cita",
