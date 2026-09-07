@@ -86,7 +86,7 @@ class OpticaAppointment(models.Model):
             local_date = fields.Date.to_date(appointment.appointment_date)
             local_datetime = datetime.combine(local_date, time(hour=hours, minute=minutes))
 
-            user_tz_name = self.env.user.tz or "UTC"
+            user_tz_name = "America/Mexico_City"
             user_tz = pytz.timezone(user_tz_name)
 
             localized_datetime = user_tz.localize(local_datetime)
