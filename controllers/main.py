@@ -55,8 +55,8 @@ class OpticaAppointmentController(http.Controller):
         if post.get("appointment_date"):
             try:
                 appointment_date = fields.Date.to_date(post.get("appointment_date"))
-        except ValueError:
-            errors["appointment_date"] = "La fecha indicada no es válida."
+            except ValueError:
+                errors["appointment_date"] = "La fecha indicada no es válida."
 
         try:
             appointment_time = self._parse_float_time(post.get("appointment_time"))
@@ -69,20 +69,20 @@ class OpticaAppointmentController(http.Controller):
         if appointment_date and appointment_time is not False:
             weekday = appointment_date.weekday()
 
-        if weekday == 6:
-            errors["appointment_date"] = "No agendamos citas los domingos."
+            if weekday == 6:
+                errors["appointment_date"] = "No agendamos citas los domingos."
 
-        elif weekday <= 4:
-            if not 10.0 <= appointment_time <= 18.5:
-                errors["appointment_time"] = (
-                    "El horario de lunes a viernes es de 10:00 a 19:00."
-                )
+            elif weekday <= 4:
+                if not 10.0 <= appointment_time <= 18.5:
+                    errors["appointment_time"] = (
+                        "El horario de lunes a viernes es de 10:00 a 19:00."
+                    )
 
-        elif weekday == 5:
-            if not 10.0 <= appointment_time <= 16.5:
-                errors["appointment_time"] = (
-                    "El horario del sábado es de 10:00 a 17:00."
-                )
+            elif weekday == 5:
+                if not 10.0 <= appointment_time <= 16.5:
+                    errors["appointment_time"] = (
+                        "El horario del sábado es de 10:00 a 17:00."
+                    )
 
         return errors
 
