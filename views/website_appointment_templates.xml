@@ -38,7 +38,7 @@
                                     </t>
                                 </div>
 
-                                <div class="mb-3">
+                               <!-- <div class="mb-3">
                                     <label for="phone" class="form-label">Teléfono</label>
                                     <input
                                         type="tel"
@@ -53,7 +53,7 @@
                                             <t t-esc="errors.get('phone')"/>
                                         </small>
                                     </t>
-                                </div>
+                                </div> -->
 
                                 <div class="mb-3">
                                     <label for="whatsapp" class="form-label">WhatsApp</label>
@@ -62,6 +62,7 @@
                                         name="whatsapp"
                                         id="whatsapp"
                                         class="form-control"
+                                        required="required"
                                         t-att-value="form_values.get('whatsapp', '')"
                                     />
                                 </div>
@@ -83,7 +84,7 @@
                                     </t>
                                 </div>
 
-                                <div class="mb-3">
+                                 <!--  <div class="mb-3">
                                     <label for="appointment_type" class="form-label">Tipo de cita</label>
                                     <select
                                         name="appointment_type"
@@ -115,7 +116,7 @@
                                             <t t-esc="errors.get('appointment_type')"/>
                                         </small>
                                     </t>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
@@ -153,7 +154,7 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
+                               <!-- <div class="mb-3">
                                     <label for="reason" class="form-label">Motivo de la cita</label>
                                     <textarea
                                         name="reason"
@@ -167,7 +168,7 @@
                                             <t t-esc="errors.get('reason')"/>
                                         </small>
                                     </t>
-                                </div>
+                                </div> -->
 
                                 <button type="submit" class="btn btn-primary">
                                     Agendar cita
