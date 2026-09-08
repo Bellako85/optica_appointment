@@ -21,14 +21,14 @@ class OpticaAppointmentController(http.Controller):
     def _prepare_appointment_values(self, post):
         return {
             "patient_name": post.get("patient_name", "").strip(),
-            "phone": post.get("phone", "").strip(),
+            # "phone": post.get("phone", "").strip(),
             "whatsapp": post.get("whatsapp", "").strip(),
             "email": post.get("email", "").strip(),
-            "appointment_type": post.get("appointment_type", "exam"),
+            # "appointment_type": post.get("appointment_type", "exam"),
             "appointment_date": post.get("appointment_date"),
             "appointment_time": self._parse_float_time(post.get("appointment_time")),
             "duration": 0.5,
-            "reason": post.get("reason", "").strip(),
+            # "reason": post.get("reason", "").strip(),
             "state": "draft",
         }
 
@@ -37,12 +37,13 @@ class OpticaAppointmentController(http.Controller):
 
         required_fields = {
             "patient_name": "El nombre es obligatorio.",
-            "phone": "El teléfono es obligatorio.",
+            # "phone": "El teléfono es obligatorio.",
+            "whatsapp": "El WhatsApp es obligatorio.",
             "email": "El email es obligatorio.",
-            "appointment_type": "El tipo de cita es obligatorio.",
+            # "appointment_type": "El tipo de cita es obligatorio.",
             "appointment_date": "La fecha deseada es obligatoria.",
             "appointment_time": "La hora deseada es obligatoria.",
-            "reason": "El motivo de la cita es obligatorio.",
+            # "reason": "El motivo de la cita es obligatorio.",
         }
 
         for field_name, message in required_fields.items():
