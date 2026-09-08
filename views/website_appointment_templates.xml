@@ -4,9 +4,9 @@
     <template id="appointment_form" name="Agenda tu cita">
         <t t-call="website.layout">
             <div id="wrap" class="oe_structure">
-                <section class="container py-5">
+                <section class="container py-5 optica-appointment-page">
                     <div class="row justify-content-center">
-                        <div class="col-lg-8">
+                        <div class="col-lg-8 optica-appointment-card">
                             <h1 class="mb-3">Agenda tu cita</h1>
                             <p class="lead mb-4">
                                 Completa tus datos y nuestro equipo confirmará tu atención en la óptica.
