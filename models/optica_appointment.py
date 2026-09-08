@@ -15,8 +15,12 @@ class OpticaAppointment(models.Model):
 
     patient_name = fields.Char(string="Nombre del paciente", required=True, tracking=True)
     partner_id = fields.Many2one("res.partner", string="Paciente", tracking=True)
-    phone = fields.Char(string="Teléfono", required=True, tracking=True)
-    whatsapp = fields.Char(string="WhatsApp", tracking=True)
+    phone = fields.Char(
+        string="Teléfono", 
+        # required=True, 
+        tracking=True
+    )
+    whatsapp = fields.Char(string="WhatsApp", required=True, tracking=True)
     email = fields.Char(string="Email", required=True, tracking=True)
 
     appointment_type = fields.Selection(
@@ -30,7 +34,7 @@ class OpticaAppointment(models.Model):
         ],
         string="Tipo de cita",
         default="exam",
-        required=True,
+        # required=True,
         tracking=True,
     )
 
@@ -46,7 +50,12 @@ class OpticaAppointment(models.Model):
     appointment_datetime = fields.Datetime(string="Inicio de cita", compute="_compute_appointment_datetime", store=True, index=True)
     appointment_end_datetime = fields.Datetime(string="Fin de cita", compute="_compute_appointment_end_datetime", store=True, index=True)
     
-    reason = fields.Text(string="Motivo de la cita", required=True, tracking=True)
+    reason = fields.Text(
+        string="Motivo de la cita",
+        # required=True, 
+        tracking=True
+    )
+
     state = fields.Selection(
         selection=[
             ("draft", "Pendiente"),
