@@ -1,8 +1,82 @@
 .optica-appointment-page {
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.08), rgba(32, 201, 151, 0.08));
-    min-height: 70vh;
+    min-height: 80vh;
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(0, 123, 255, 0.18),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(32, 201, 151, 0.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #f4f8fb 0%,
+            #eaf3f8 100%
+        );
 
     .optica-appointment-card {
-        border-radius: 1rem;
+        padding: 2.5rem;
+
+        background: rgba(255, 255, 255, 0.58);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        border: 1px solid rgba(255, 255, 255, 0.75);
+        border-radius: 24px;
+
+        box-shadow:
+            0 20px 50px rgba(0, 0, 0, 0.10),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+        h1 {
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .form-control {
+            min-height: 48px;
+
+            background: rgba(255, 255, 255, 0.70);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+
+            transition: all 0.2s ease;
+
+            &:focus {
+                background: rgba(255, 255, 255, 0.90);
+                border-color: rgba(0, 123, 255, 0.45);
+                box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.10);
+            }
+        }
+
+        .btn-primary {
+            min-height: 48px;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+    }
+}
+
+@media (max-width: 767.98px) {
+    .optica-appointment-page {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+
+        .optica-appointment-card {
+            padding: 1.5rem;
+            border-radius: 18px;
+        }
     }
 }
