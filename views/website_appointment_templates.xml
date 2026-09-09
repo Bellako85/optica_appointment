@@ -118,41 +118,47 @@
                                     </t>
                                 </div> -->
 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="appointment_date" class="form-label">Fecha deseada</label>
-                                        <input
-                                            type="date"
-                                            name="appointment_date"
-                                            id="appointment_date"
-                                            class="form-control"
-                                            required="required"
-                                            t-att-value="form_values.get('appointment_date', '')"
-                                        />
-                                        <t t-if="errors.get('appointment_date')">
-                                            <small class="text-danger">
-                                                <t t-esc="errors.get('appointment_date')"/>
-                                            </small>
-                                        </t>
-                                    </div>
+                               <div class="col-md-6 mb-3">
+                                <label for="appointment_time" class="form-label">Hora deseada</label>
 
-                                    <div class="col-md-6 mb-3">
-                                        <label for="appointment_time" class="form-label">Hora deseada</label>
-                                        <input
-                                            type="time"
-                                            name="appointment_time"
-                                            id="appointment_time"
-                                            class="form-control"
-                                            required="required"
-                                            t-att-value="form_values.get('appointment_time', '')"
-                                        />
-                                        <t t-if="errors.get('appointment_time')">
-                                            <small class="text-danger">
-                                                <t t-esc="errors.get('appointment_time')"/>
-                                            </small>
-                                        </t>
-                                    </div>
-                                </div>
+                                <select
+                                    name="appointment_time"
+                                    id="appointment_time"
+                                    class="form-control"
+                                    required="required"
+                                >
+                                <option value="">Selecciona una hora</option>
+
+                                <option value="10:00" t-att-selected="'selected' if form_values.get('appointment_time') == '10:00' else None">10:00</option>
+                                <option value="10:30" t-att-selected="'selected' if form_values.get('appointment_time') == '10:30' else None">10:30</option>
+                                <option value="11:00" t-att-selected="'selected' if form_values.get('appointment_time') == '11:00' else None">11:00</option>
+                                <option value="11:30" t-att-selected="'selected' if form_values.get('appointment_time') == '11:30' else None">11:30</option>
+
+                                <option value="12:00" t-att-selected="'selected' if form_values.get('appointment_time') == '12:00' else None">12:00</option>
+                                <option value="12:30" t-att-selected="'selected' if form_values.get('appointment_time') == '12:30' else None">12:30</option>
+                                <option value="13:00" t-att-selected="'selected' if form_values.get('appointment_time') == '13:00' else None">13:00</option>
+                                <option value="13:30" t-att-selected="'selected' if form_values.get('appointment_time') == '13:30' else None">13:30</option>
+
+                                <option value="14:00" t-att-selected="'selected' if form_values.get('appointment_time') == '14:00' else None">14:00</option>
+                                <option value="14:30" t-att-selected="'selected' if form_values.get('appointment_time') == '14:30' else None">14:30</option>
+                                <option value="15:00" t-att-selected="'selected' if form_values.get('appointment_time') == '15:00' else None">15:00</option>
+                                <option value="15:30" t-att-selected="'selected' if form_values.get('appointment_time') == '15:30' else None">15:30</option>
+
+                                <option value="16:00" t-att-selected="'selected' if form_values.get('appointment_time') == '16:00' else None">16:00</option>
+                                <option value="16:30" t-att-selected="'selected' if form_values.get('appointment_time') == '16:30' else None">16:30</option>
+                                <option value="17:00" t-att-selected="'selected' if form_values.get('appointment_time') == '17:00' else None">17:00</option>
+                                <option value="17:30" t-att-selected="'selected' if form_values.get('appointment_time') == '17:30' else None">17:30</option>
+
+                                <option value="18:00" t-att-selected="'selected' if form_values.get('appointment_time') == '18:00' else None">18:00</option>
+                                <option value="18:30" t-att-selected="'selected' if form_values.get('appointment_time') == '18:30' else None">18:30</option>
+                            </select>
+
+                            <t t-if="errors.get('appointment_time')">
+                                <small class="text-danger">
+                                        <t t-esc="errors.get('appointment_time')"/>
+                                </small>
+                            </t>
+                        </div>
 
                                <!-- <div class="mb-3">
                                     <label for="reason" class="form-label">Motivo de la cita</label>
