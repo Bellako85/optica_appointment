@@ -1,5 +1,5 @@
 .optica-appointment-page {
-    min-height: 80vh;
+    min-height: 100vh;
     padding-top: 4rem !important;
     padding-bottom: 4rem !important;
 
@@ -19,6 +19,21 @@
             #f4f8fb 0%,
             #eaf3f8 100%
         );
+
+        background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.13) 1.45px,
+            transparent 1.45px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.13) 1.45px,
+            transparent 1.45px
+        );
+    background-size: 37px 37px;
+
+    position: relative;
+    overflow-x: hidden;
 
     .optica-appointment-card {
         padding: 2.5rem;
