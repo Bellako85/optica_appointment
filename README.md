@@ -1,5 +1,4 @@
 # optica_appointment
-# optica_appointment
 
 Módulo Odoo 17 para gestionar citas de pacientes de una óptica.
 
