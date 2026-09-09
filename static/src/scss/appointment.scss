@@ -1,8 +1,181 @@
 .optica-appointment-page {
-    background: linear-gradient(135deg, rgba(0, 123, 255, 0.08), rgba(32, 201, 151, 0.08));
-    min-height: 70vh;
+    --optica-surface: #e8eef3;
+    --optica-ink: #273746;
+    --optica-muted: #667987;
+    --optica-primary: #157a8a;
+    --optica-primary-dark: #0f6471;
+    --optica-shadow-dark: rgba(145, 160, 171, 0.52);
+    --optica-shadow-light: rgba(255, 255, 255, 0.92);
+    background: var(--optica-surface);
+    color: var(--optica-ink);
+    min-height: 75vh;
 
     .optica-appointment-card {
+        background: var(--optica-surface);
+        border-radius: 2rem;
+        box-shadow: 18px 18px 38px var(--optica-shadow-dark),
+            -18px -18px 38px var(--optica-shadow-light);
+        overflow: hidden;
+    }
+
+    .optica-appointment-heading {
+        margin: 0 auto 2.25rem;
+        max-width: 38rem;
+
+        h1 {
+            color: var(--optica-ink);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin: 0.45rem 0 0.65rem;
+        }
+
+        p {
+            color: var(--optica-muted);
+            font-size: 1.05rem;
+            line-height: 1.65;
+            margin: 0;
+        }
+    }
+
+    .optica-appointment-icon {
+        align-items: center;
+        background: var(--optica-surface);
+        border-radius: 50%;
+        box-shadow: 7px 7px 14px var(--optica-shadow-dark),
+            -7px -7px 14px var(--optica-shadow-light);
+        color: var(--optica-primary);
+        display: inline-flex;
+        font-size: 1.4rem;
+        height: 4rem;
+        justify-content: center;
+        margin-bottom: 1rem;
+        width: 4rem;
+    }
+
+    .optica-appointment-eyebrow {
+        color: var(--optica-primary-dark);
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .optica-appointment-form {
+        .form-label {
+            color: #405462;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.025em;
+            margin: 0 0 0.55rem 0.45rem;
+        }
+
+        .form-control {
+            background-color: var(--optica-surface);
+            border: 1px solid transparent;
+            border-radius: 0.9rem;
+            box-shadow: inset 5px 5px 10px rgba(145, 160, 171, 0.42),
+                inset -5px -5px 10px var(--optica-shadow-light);
+            color: var(--optica-ink);
+            min-height: 3.25rem;
+            padding: 0.75rem 1rem;
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+
+            &::placeholder {
+                color: #8797a2;
+                opacity: 1;
+            }
+
+            &:hover {
+                border-color: rgba(21, 122, 138, 0.2);
+            }
+
+            &:focus {
+                background-color: var(--optica-surface);
+                border-color: var(--optica-primary);
+                box-shadow: inset 4px 4px 8px rgba(145, 160, 171, 0.38),
+                    inset -4px -4px 8px var(--optica-shadow-light),
+                    0 0 0 0.22rem rgba(21, 122, 138, 0.16);
+                color: var(--optica-ink);
+            }
+        }
+
+        textarea.form-control {
+            min-height: 8rem;
+            resize: vertical;
+        }
+    }
+
+    .btn-primary {
+        align-items: center;
+        background: var(--optica-primary);
+        border: 0;
         border-radius: 1rem;
+        box-shadow: 7px 7px 14px var(--optica-shadow-dark),
+            -7px -7px 14px var(--optica-shadow-light);
+        display: inline-flex;
+        font-weight: 700;
+        justify-content: center;
+        min-height: 3.35rem;
+        padding: 0.75rem 1.75rem;
+        transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+
+        &:hover,
+        &:focus {
+            background: var(--optica-primary-dark);
+            transform: translateY(-2px);
+        }
+
+        &:focus-visible {
+            box-shadow: 7px 7px 14px var(--optica-shadow-dark),
+                -7px -7px 14px var(--optica-shadow-light),
+                0 0 0 0.25rem rgba(21, 122, 138, 0.3);
+        }
+
+        &:active {
+            box-shadow: inset 4px 4px 8px rgba(7, 65, 73, 0.35),
+                inset -3px -3px 7px rgba(255, 255, 255, 0.18);
+            transform: translateY(0);
+        }
+    }
+
+    .text-danger {
+        margin-left: 0.45rem;
+    }
+
+    .optica-success-card {
+        .optica-success-icon {
+            color: #23855b;
+            font-size: 1.6rem;
+        }
+
+        h1 {
+            color: var(--optica-ink);
+            font-weight: 700;
+        }
+
+        .lead {
+            color: var(--optica-muted) !important;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .optica-appointment-card {
+            border-radius: 1.4rem;
+            box-shadow: 10px 10px 24px var(--optica-shadow-dark),
+                -10px -10px 24px var(--optica-shadow-light);
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .form-control,
+        .btn-primary {
+            transition: none;
+        }
     }
 }
