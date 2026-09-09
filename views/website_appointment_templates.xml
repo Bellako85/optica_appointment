@@ -118,6 +118,24 @@
                                     </t>
                                 </div> -->
 
+                               <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="appointment_date" class="form-label">Fecha deseada</label>
+                                        <input
+                                            type="date"
+                                            name="appointment_date"
+                                            id="appointment_date"
+                                            class="form-control"
+                                            required="required"
+                                            t-att-value="form_values.get('appointment_date', '')"
+                                        />
+                                        <t t-if="errors.get('appointment_date')">
+                                            <small class="text-danger">
+                                                <t t-esc="errors.get('appointment_date')"/>
+                                            </small>
+                                        </t>
+                                    </div>
+
                                <div class="col-md-6 mb-3">
                                 <label for="appointment_time" class="form-label">Hora deseada</label>
 
