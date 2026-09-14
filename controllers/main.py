@@ -19,6 +19,22 @@ class OpticaAppointmentController(http.Controller):
         return float(value)
 
     def _prepare_appointment_values(self, post):
+        httprequest = request.httprequest
+
+        user_agent = (
+            httprequest.user_agent.string
+            if httprequest.user_agent
+            else ""
+        )
+
+        client_ip = (
+            httprequest.headers.get("X-Forwarded-For")
+            or httprequest.remote_addr
+        )
+
+        fbp = httprequest.cookies.get("_fbp")
+        fbc = httprequest.cookies.get("_fbc")
+
         return {
             "patient_name": post.get("patient_name", "").strip(),
             # "phone": post.get("phone", "").strip(),
@@ -26,12 +42,19 @@ class OpticaAppointmentController(http.Controller):
             "email": post.get("email", "").strip(),
             # "appointment_type": post.get("appointment_type", "exam"),
             "appointment_date": post.get("appointment_date"),
-            "appointment_time": self._parse_float_time(post.get("appointment_time")),
+            "appointment_time": self._parse_float_time(
+                post.get("appointment_time")
+            ),
             "duration": 0.5,
             # "reason": post.get("reason", "").strip(),
             "state": "draft",
-        }
 
+            "x_meta_fbp": fbp or False,
+            "x_meta_fbc": fbc or False,
+            "x_meta_client_ip": client_ip or False,
+            "x_meta_user_agent": user_agent or False,
+        }
+        
     def _validate_appointment_form(self, post):
         errors = {}
 
