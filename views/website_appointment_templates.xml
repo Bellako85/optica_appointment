@@ -27,6 +27,7 @@
                                         type="text"
                                         name="patient_name"
                                         id="patient_name"
+                                        placeholder="Tu nombre completo"
                                         class="form-control"
                                         required="required"
                                         t-att-value="form_values.get('patient_name', '')"
