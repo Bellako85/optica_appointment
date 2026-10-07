@@ -210,24 +210,32 @@
     </template>
 
      <template id="appointment_success" name="Cita registrada">
-        <t t-call="website.layout">
-            <div id="wrap" class="oe_structure">
-                <section class="container py-5 text-center">
-                    <h1 class="mb-3">¡Gracias!</h1>
-                    <p class="lead">
-                        Tu cita fue registrada correctamente. Te contactaremos para confirmar cualquier detalle adicional.
-                    </p>
-                    <a href="/" class="btn btn-primary mt-3">
-                        Volver al inicio
-                    </a>
-                </section>
-            </div>
-            <script>
-                if (!sessionStorage.getItem('schedule_fired_{{event_id}}')) {
-                    fbq('track', 'Schedule', {}, {eventID: '{{event_id}}'});
-                    sessionStorage.setItem('schedule_fired_{{event_id}}', '1');
-                      }
-            </script>
+    <t t-call="website.layout">
+        <div id="wrap" class="oe_structure">
+            <section class="container py-5 text-center">
+                <h1 class="mb-3">¡Gracias!</h1>
+
+                <p class="lead">
+                    Tu cita fue registrada correctamente.
+                    Te contactaremos para confirmar cualquier detalle adicional.
+                </p>
+
+                <a href="/" class="btn btn-primary mt-3">
+                    Volver al inicio
+                </a>
+            </section>
+        </div>
+
+        <script>
+            if (!sessionStorage.getItem('optica_schedule_fired')) {
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'Schedule');
+                    sessionStorage.setItem('optica_schedule_fired', '1');
+                }
+            }
+        </script>
+    </t>
+</template>
         </t>
     </template>
 
