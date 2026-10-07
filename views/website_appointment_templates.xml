@@ -223,13 +223,10 @@
                 </section>
             </div>
             <script>
-              // Evita disparar 2 veces si recargan la página de gracias
-              if (!sessionStorage.getItem('schedule_fired')) {
-                const eventId = 'schedule_' + Date.now();
-                fbq('track', 'Schedule', {}, {eventID: eventId});
-                sessionStorage.setItem('schedule_fired', '1');
-                sessionStorage.setItem('last_schedule_event_id', eventId);
-              }
+                if (!sessionStorage.getItem('schedule_fired_{{event_id}}')) {
+                    fbq('track', 'Schedule', {}, {eventID: '{{event_id}}'});
+                    sessionStorage.setItem('schedule_fired_{{event_id}}', '1');
+                      }
             </script>
         </t>
     </template>
