@@ -209,7 +209,7 @@
         </t>
     </template>
 
-    <template id="appointment_success" name="Cita registrada">
+     <template id="appointment_success" name="Cita registrada">
         <t t-call="website.layout">
             <div id="wrap" class="oe_structure">
                 <section class="container py-5 text-center">
@@ -223,17 +223,16 @@
                 </section>
             </div>
             <script>
-              // Genera un ID único para esta cita
-              const eventId = 'schedule_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-              // Lo guardamos para que tu backend lo pueda leer si lo necesitas
-              sessionStorage.setItem('last_schedule_event_id', eventId);
-              
-              if (!sessionStorage.getItem('schedule_fired_' + eventId)) {
+              // Evita disparar 2 veces si recargan la página de gracias
+              if (!sessionStorage.getItem('schedule_fired')) {
+                const eventId = 'schedule_' + Date.now();
                 fbq('track', 'Schedule', {}, {eventID: eventId});
-                sessionStorage.setItem('schedule_fired_' + eventId, '1');
+                sessionStorage.setItem('schedule_fired', '1');
+                sessionStorage.setItem('last_schedule_event_id', eventId);
               }
             </script>
         </t>
     </template>
 
 </odoo>
+
