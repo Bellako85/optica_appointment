@@ -222,6 +222,17 @@
                     </a>
                 </section>
             </div>
+            <script>
+              // Genera un ID único para esta cita
+              const eventId = 'schedule_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+              // Lo guardamos para que tu backend lo pueda leer si lo necesitas
+              sessionStorage.setItem('last_schedule_event_id', eventId);
+              
+              if (!sessionStorage.getItem('schedule_fired_' + eventId)) {
+                fbq('track', 'Schedule', {}, {eventID: eventId});
+                sessionStorage.setItem('schedule_fired_' + eventId, '1');
+              }
+            </script>
         </t>
     </template>
 
