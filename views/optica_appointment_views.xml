@@ -12,6 +12,7 @@
                 <field name="partner_id"/>
                 <field name="phone"/>
                 <field name="appointment_type"/>
+                <field name="appointment_origin"/>
                 <field name="state"/>
             </tree>
         </field>
