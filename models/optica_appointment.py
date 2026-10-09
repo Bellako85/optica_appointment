@@ -29,6 +29,17 @@ class OpticaAppointment(models.Model):
     whatsapp = fields.Char(string="WhatsApp", required=True, tracking=True)
     email = fields.Char(string="Email", required=True, tracking=True)
 
+    appointment_origin = fields.Selection(
+        [
+            ("website", "Sitio web"),
+            ("backend", "Backend"),
+        ],
+        string="Origen de la cita",
+        default="backend",
+        required=True,
+        copy=False,
+    )
+    
     appointment_type = fields.Selection(
         selection=[
             ("exam", "Examen visual"),
