@@ -245,13 +245,7 @@ Motivo: %s
                 appointment.partner_id = appointment._get_or_create_partner().id
             appointment._create_calendar_event()
             appointment._create_crm_opportunity()
-            event_id = f"schedule_{appointment.id}_{int(time_module.time())}"
-            event_time = int(time_module.time())
-            appointment.write({"x_meta_event_id": event_id})
-            try:
-                appointment._meta_send_schedule_capi(appointment, event_id, event_time)
-            except Exception:
-                pass
+        
         self.write({"state": "confirmed"})
 
     def action_cancel(self):
