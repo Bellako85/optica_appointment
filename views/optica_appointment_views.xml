@@ -71,6 +71,7 @@
 
                         <group string="Cita">
                             <field name="appointment_type"/>
+                            <field name="appointment_origin" readonly="1"/>
                             <field name="appointment_date"/>
                             <field name="appointment_time" widget="float_time"/>
                             <field name="duration" widget="float_time"/>
@@ -155,6 +156,20 @@
                     name="cancelled"
                     string="Canceladas"
                     domain="[('state', '=', 'cancelled')]"
+                />
+
+                <separator/>
+
+                <filter
+                    name="origin_website"
+                    string="Desde sitio web"
+                    domain="[('appointment_origin', '=', 'website')]"
+                />
+
+                <filter
+                    name="origin_backend"
+                    string="Agendadas manualmente"
+                    domain="[('appointment_origin', '=', 'backend')]"
                 />
 
                 <group expand="0" string="Agrupar por">
