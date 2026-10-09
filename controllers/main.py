@@ -40,6 +40,7 @@ class OpticaAppointmentController(http.Controller):
             # "phone": post.get("phone", "").strip(),
             "whatsapp": post.get("whatsapp", "").strip(),
             "email": post.get("email", "").strip(),
+            "appointment_origin": "website",
             # "appointment_type": post.get("appointment_type", "exam"),
             "appointment_date": post.get("appointment_date"),
             "appointment_time": self._parse_float_time(
