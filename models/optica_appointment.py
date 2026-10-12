@@ -33,11 +33,19 @@ class OpticaAppointment(models.Model):
         [
             ("website", "Sitio web"),
             ("backend", "Backend"),
+            ("whatsapp_bot", "Agente de WhatsApp"),
         ],
         string="Origen de la cita",
         default="backend",
         required=True,
         copy=False,
+    )
+
+    google_event_id = fields.Char(
+        string="ID del evento de Google",
+        readonly=True,
+        copy=False,
+        index=True,
     )
     
     appointment_type = fields.Selection(
@@ -243,7 +251,10 @@ Motivo: %s
         for appointment in self:
             if not appointment.partner_id:
                 appointment.partner_id = appointment._get_or_create_partner().id
-            appointment._create_calendar_event()
+            
+             if appointment.appointment_origin != "whatsapp_bot":
+                appointment._create_calendar_event()
+            
             appointment._create_crm_opportunity()
         
         self.write({"state": "confirmed"})
