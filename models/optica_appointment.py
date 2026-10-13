@@ -253,7 +253,7 @@ Motivo: %s
                 appointment.partner_id = appointment._get_or_create_partner().id
             
              if appointment.appointment_origin != "whatsapp_bot":
-                appointment._create_calendar_event()
+                 appointment._create_calendar_event()
             
             appointment._create_crm_opportunity()
         
