@@ -226,17 +226,17 @@
             </section>
         </div>
 
-        <script>
-            if (!sessionStorage.getItem('optica_schedule_fired')) {
-                if (typeof fbq !== 'undefined') {
-                    fbq('track', 'Schedule');
-                    sessionStorage.setItem('optica_schedule_fired', '1');
+            <t t-if="meta_event_id">
+                <script type="text/javascript">
+                    if (typeof fbq !== 'undefined') {
+                        fbq('track', 'Schedule', {}, {
+                            eventID: '<t t-out="meta_event_id"/>'
+                    });
                 }
-            }
-        </script>
+            </script>
+        </t>
     
         </t>
     </template>
-
 </odoo>
 
