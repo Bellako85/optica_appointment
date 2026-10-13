@@ -27,7 +27,7 @@ class OpticaAppointment(models.Model):
     partner_id = fields.Many2one("res.partner", string="Paciente", tracking=True)
     phone = fields.Char(string="Teléfono", tracking=True)
     whatsapp = fields.Char(string="WhatsApp", required=True, tracking=True)
-    email = fields.Char(string="Email", required=True, tracking=True)
+    email = fields.Char(string="Email", tracking=True)
 
     appointment_origin = fields.Selection(
         [
