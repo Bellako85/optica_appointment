@@ -163,7 +163,7 @@ class OpticaAppointmentController(http.Controller):
                 return request.render("optica_appointment.appointment_form", values)
 
             try:
-                request.env["optica.appointment"].sudo().create(
+                appointment = request.env["optica.appointment"].sudo().create(
                     self._prepare_appointment_values(post)
                 )
             except ValidationError:
@@ -172,8 +172,19 @@ class OpticaAppointmentController(http.Controller):
                 }
                 return request.render("optica_appointment.appointment_form", values)
 
-            return request.redirect("/agendar-cita/gracias")
+            event_id = f"website_schedule_{secrets.token_hex(16)}"
 
+            appointment.sudo().write({
+                "x_meta_event_id": event_id,
+            })
+
+            request.session["optica_schedule_pending"] = {
+                "appointment_id": appointment.id,
+                "event_id": event_id,
+            }
+
+            return request.redirect("/agendar-cita/gracias")       
+        
         return request.render("optica_appointment.appointment_form", values)
 
     @http.route(
