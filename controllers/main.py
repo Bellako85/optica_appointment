@@ -193,5 +193,24 @@ class OpticaAppointmentController(http.Controller):
         auth="public",
         website=True,
     )
+
     def appointment_success(self, **kwargs):
-        return request.render("optica_appointment.appointment_success")
+        pending = request.session.pop("optica_schedule_pending", None)
+        event_id = False
+
+        if pending:
+            appointment = request.env["optica.appointment"].sudo().browse(
+                pending.get("appointment_id")
+            ).exists()
+
+            if (
+                appointment
+                and appointment.appointment_origin == "website"
+                and appointment.x_meta_event_id == pending.get("event_id")
+            ):
+                event_id = appointment.x_meta_event_id
+
+        return request.render(
+            "optica_appointment.appointment_success",
+            {"meta_event_id": event_id},
+        )
