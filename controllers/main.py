@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import secrets
+
 from odoo import fields, http
 from odoo.exceptions import ValidationError
 from odoo.http import request
