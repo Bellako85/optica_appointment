@@ -47,6 +47,14 @@ class OpticaAppointment(models.Model):
         copy=False,
         index=True,
     )
+
+    _sql_constraints = [
+    (
+        "google_event_id_unique",
+        "unique(google_event_id)",
+        "El evento de Google Calendar ya está vinculado a otra cita.",
+    ),
+]
     
     appointment_type = fields.Selection(
         selection=[
